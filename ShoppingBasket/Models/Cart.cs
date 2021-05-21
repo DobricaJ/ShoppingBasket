@@ -4,6 +4,12 @@ namespace ShoppingBasket
 {
     public class Cart
     {
+        public Cart(List<CartItem> cartItems, decimal total)
+        {
+            CartItems = cartItems;
+            Total = total;
+        }
+
         public List<CartItem> CartItems { get; set; }
 
         public decimal Total { get; set; }
