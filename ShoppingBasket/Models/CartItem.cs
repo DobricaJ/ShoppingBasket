@@ -8,6 +8,6 @@
 
         public decimal SpecialPrice { get; set; }
 
-        public QuantityDiscountStrategy Discount { get; set; }
+        public DiscountStrategy Discount { get; set; }
     }
 }
