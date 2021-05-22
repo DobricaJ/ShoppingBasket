@@ -4,15 +4,15 @@ namespace ShoppingBasket
 {
     public class Cart
     {
+        public List<CartItem> CartItems;
+        public decimal Total;
+
         public Cart(List<CartItem> cartItems, decimal total)
         {
             CartItems = cartItems;
             Total = total;
         }
 
-        public List<CartItem> CartItems { get; set; }
-
-        public decimal Total { get; set; }
 
         // For logging
         public override string ToString()

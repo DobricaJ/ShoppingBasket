@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ShoppingBasket.DiscountStrategies;
 
 namespace ShoppingBasket.Tests
 {
@@ -29,25 +30,12 @@ namespace ShoppingBasket.Tests
 
             bread = new() { Name = "Bread", Price = (decimal)1.00 };
 
-
             /// Discounts:
             ///  • Buy 2 butters and get one bread at 50% off
             ///  • Buy 3 milks and get the 4th milk for free
-            milkDiscount = new QuantityDiscountStrategy()
-            {
-                Product = milk,
-                ProductDependency = milk,
-                QuantityForDependency = 3,
-                DiscountFactor = (decimal)0
-            };
+            milkDiscount = new QuantityDiscountStrategy((decimal)0, milk, 3);
 
-            breadDiscount = new QuantityDiscountStrategy()
-            {
-                Product = bread,
-                ProductDependency = butter,
-                QuantityForDependency = 2,
-                DiscountFactor = (decimal)0.5
-            };
+            breadDiscount = new QuantityDiscountStrategy((decimal)0.5, butter, 2);
         }
 
         [TestMethod]
@@ -139,6 +127,24 @@ namespace ShoppingBasket.Tests
             decimal expected = (decimal)9.00;
 
             cart.AddToCart(new CartItem { Product = butter, Quantitiy = 2 });
+            cart.AddToCart(new CartItem { Product = milk, Quantitiy = 8, Discount = milkDiscount });
+            cart.AddToCart(new CartItem { Product = bread, Quantitiy = 1, Discount = breadDiscount });
+
+            decimal total = cart.GetTotal();
+
+            Assert.AreEqual(expected, total);
+        }
+
+        /// Scenario 5:
+        ///  • Given the basket has 2 butters, 1 bread, and 8 milks. Total should be $.00
+        ///    Butter have basic discount 50%. Total should be $8.00
+        /// </summary>
+        [TestMethod]
+        public void GetTotal_WithDiscount_ScenarioFive()
+        {
+            decimal expected = (decimal)8.20;
+
+            cart.AddToCart(new CartItem { Product = butter, Quantitiy = 2, Discount = new BasicDiscountStrategy((decimal)0.5)});
             cart.AddToCart(new CartItem { Product = milk, Quantitiy = 8, Discount = milkDiscount });
             cart.AddToCart(new CartItem { Product = bread, Quantitiy = 1, Discount = breadDiscount });
 
